@@ -92,7 +92,7 @@ class Lexer:
                 return Token(T_OPERATOR, '>')
 
             
-            if self.current_char in ['+', '-', '*', '/', '&&', '||', '%', '~', '^']:
+            if self.current_char in ['+', '-', '*', '/', '&', '|', '%', '~', '^']:
                 token = Token(T_OPERATOR, self.current_char)
                 self.advance()
                 return token
