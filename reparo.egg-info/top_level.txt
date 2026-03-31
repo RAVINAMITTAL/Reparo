@@ -1,0 +1,6 @@
+ai_engine
+executor
+lexer
+parser
+reparo_cli
+semantic

@@ -1,5 +1,32 @@
+# test1.rpl — Sample Replon program for testing the lexer and parser
+
 a = 10
-b = 20
+b = 20.5
+name = "Reparo"
+
+# Arithmetic
+result = a + b * 2
+
+# Comparison inside an if block
 if a != b {
-    print(a + b)
+    print(result)
 }
+
+# elif and else
+if a > 100 {
+    print("big")
+} elif a > 5 {
+    print("medium")
+} else {
+    print("small")
+}
+
+# While loop
+counter = 0
+while counter < 3 {
+    counter = counter + 1
+}
+
+# Boolean and null
+flag = true
+nothing = null

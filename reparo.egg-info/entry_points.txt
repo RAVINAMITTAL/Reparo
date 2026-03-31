@@ -1,0 +1,2 @@
+[console_scripts]
+reparo = reparo_cli:main
