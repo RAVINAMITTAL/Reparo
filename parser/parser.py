@@ -41,7 +41,7 @@ from lexer.tokens import (
 from parser.ast.nodes import (
     NumberNode, StringNode, BoolNode, NullNode,
     IdentifierNode, BinOpNode, UnaryOpNode,
-    AssignmentNode, PrintNode, IfNode, WhileNode, ForNode,DoWhileNode ,FunctionDefNode, ReturnNode, FunctionCallNode
+    AssignmentNode, PrintNode, IfNode, WhileNode, ForNode,DoWhileNode ,FunctionDefNode,ReturnNode, FunctionCallNode
 )
 
 
@@ -172,13 +172,17 @@ class Parser:
 
         if tok.type == T_KEYWORD and tok.value == 'do':
             return self._do_while_stmt()
-        # function definition
+    # function definition
         if tok.type == T_KEYWORD and tok.value == 'function':
             return self._function_def()
 
     # return statement
         if tok.type == T_KEYWORD and tok.value == 'return':
            return self._return_stmt()
+    # print 
+        if tok.type == T_KEYWORD and tok.value == 'print':
+            return self._print_stmt()
+           
     # fallback
         return self._expression()
     
@@ -437,21 +441,31 @@ class Parser:
 
         name = self._expect(T_IDENTIFIER)
 
-        self._expect(T_PARENTHESIS, '(')
-
         params = []
-        if not self._match(T_PARENTHESIS, ')'):
-            params.append(self._expect(T_IDENTIFIER))
-            while self._match(T_PUNCTUATION, ','):
+
+    # ✅ ONLY parse params IF '(' exists
+        if self._match(T_PARENTHESIS, '('):
+           self._advance()
+
+           if not self._match(T_PARENTHESIS, ')'):
+              params.append(self._expect(T_IDENTIFIER))
+              while self._match(T_PUNCTUATION, ','):
                 self._advance()
                 params.append(self._expect(T_IDENTIFIER))
 
-        self._expect(T_PARENTHESIS, ')')
+           self._expect(T_PARENTHESIS, ')')
 
         body = self._block()
 
-        return FunctionDefNode(name, params, body)
+        return FunctionDefNode(name, params, body) 
+    # return stmt
     def _return_stmt(self):
-       self._expect(T_KEYWORD, 'return')
-       value = self._expression()
-       return ReturnNode(value)
+        self._expect(T_KEYWORD, 'return')
+        value = self._expression()
+
+    # optional newline
+        if self._match(T_NEWLINE):
+           self._advance()
+
+        return ReturnNode(value)   
+    
